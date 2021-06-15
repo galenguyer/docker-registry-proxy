@@ -1,0 +1,2 @@
+#!/bin/ash
+htpasswd -B -c /auth/.htpasswd "$1"

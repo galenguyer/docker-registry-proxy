@@ -1,0 +1,35 @@
+services:
+  registry:
+    image: registry:2
+    container_name: registry
+    restart: unless-stopped
+    environment:
+      - REGISTRY_HTTP_ADDR=0.0.0.0:5000
+    networks:
+      - registry
+    volumes:
+      - type: volume
+        source: registry
+        target: /var/lib/registry
+
+  proxy:
+    build: .
+    container_name: proxy
+    restart: unless-stopped
+    networks:
+      - registry
+    links:
+      - registry:registry
+    ports:
+      - 80:80
+    volumes:
+      - type: bind
+        source: ./auth
+        target: /auth
+
+networks:
+  registry:
+    external: false
+
+volumes:
+  registry:
